@@ -10,7 +10,7 @@ module.exports = {
             time: Joi.date().timestamp(),
             status: Joi.string(),
           })
-          .label('Health Check Response schema')
+          .label('Health Check Response Schema')
       ),
     },
     validate: {},

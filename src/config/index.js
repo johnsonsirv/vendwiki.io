@@ -16,6 +16,9 @@ const config = {
     enabled: (process.env.CORS_ENABLED || 'true').trim().toLowerCase() === 'true',
     origin: process.env.CORS_ORIGIN || '*',
   },
+  swagger: {
+    enabled: (process.env.SWAGGER_ENABLED || 'true').trim().toLowerCase() === 'true',
+  },
 };
 
 config.log = {
