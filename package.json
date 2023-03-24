@@ -30,6 +30,7 @@
     "awilix": "^4.2.1",
     "hapi-swagger": "^16.0.1",
     "joi": "^17.9.1",
+    "mongoose": "^7.0.3",
     "rate-limiter-flexible": "^2.4.1",
     "uuid": "^8.3.0",
     "winston": "^3.2.1"

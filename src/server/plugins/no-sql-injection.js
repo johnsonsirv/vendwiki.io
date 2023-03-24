@@ -20,12 +20,12 @@ module.exports = ({ logger, config }) => ([
             // TODO: Log report to a slack or discord channel
 
             logger.info('no-sql-injection', {
-              endpoint: req.route.path,
-              requestId: req.info ? req.info.id : undefined,
-              accessToken: req.headers ? req.headers.x_access_token : undefined,
-              refreshToken: req.headers ? req.headers.x_refresh_token : undefined,
-              token: req.headers ? req.headers.token : undefined,
               env: config.env,
+              requestId: req.info ? req.info.id : undefined,
+              endpoint: req.route.path,
+              accessToken: req.headers ? req.headers.x_access_token : undefined,
+              token: req.headers ? req.headers.token : undefined,
+              refreshToken: req.headers ? req.headers.x_refresh_token : undefined,
             });
 
             throw e;
