@@ -18,7 +18,7 @@ module.exports = ([
     handler: ({ ProductController }) => ((request, h) => ProductController.getProducts(request, h)),
   },
   {
-    path: '/product/{productId}',
+    path: '/products/{productId}',
     method: 'GET',
     config: {
       tags: ['api'],
@@ -36,7 +36,7 @@ module.exports = ([
     method: 'POST',
     config: {
       tags: ['api'],
-      description: 'Add new product',
+      description: 'Seller add new product',
       validate: addProduct.validate,
       response: addProduct.response,
       plugins: {
@@ -50,7 +50,7 @@ module.exports = ([
     method: 'PUT',
     config: {
       tags: ['api'],
-      description: 'Update product',
+      description: 'Seller update their product',
       validate: updateProduct.validate,
       response: updateProduct.response,
       plugins: {
@@ -64,7 +64,7 @@ module.exports = ([
     method: 'DELETE',
     config: {
       tags: ['api'],
-      description: 'Remove product',
+      description: 'Seller remove their product',
       validate: removeProduct.validate,
       response: removeProduct.response,
       plugins: {
@@ -78,7 +78,7 @@ module.exports = ([
     method: 'POST',
     config: {
       tags: ['api'],
-      description: 'Buy product',
+      description: 'Buyer purchase a product',
       validate: buyProduct.validate,
       response: buyProduct.response,
       plugins: {

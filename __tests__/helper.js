@@ -8,7 +8,7 @@ const { loggerBootstrapMock } = require('./mocks/bootstrap/logger');
 const start = async (mckContainer) => {
   mckContainer.register('logger', awilix.asValue(loggerBootstrapMock));
 
-  const { results } = await bootstrap(mckContainer, { serverModules });
+  const { results } = await bootstrap(mckContainer, {}, { serverModules });
   return results;
 };
 

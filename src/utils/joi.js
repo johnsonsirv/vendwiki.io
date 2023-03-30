@@ -2,8 +2,9 @@
 const Joi = require('joi');
 const { Types: { ObjectId } } = require('mongoose');
 
-module.exports = Joi.extend(() => ({
+module.exports = Joi.extend((joi) => ({
   type: 'objectId',
+  base: joi.string(),
   validate(value, helpers) {
     if (ObjectId.isValid(value)) {
       return value;

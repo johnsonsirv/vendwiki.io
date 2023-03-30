@@ -1,7 +1,27 @@
-module.exports = async (container, modules) => {
+module.exports = async (container, helperModules, modules) => {
   let error;
   const results = {};
   const stopHandlers = [];
+
+  await Promise.all(
+    Object
+      .entries(helperModules)
+      .map(async ([key, resolver]) => {
+        try {
+          const { start, stop, register } = await resolver(container);
+          results[key] = await start();
+
+          if (register && typeof register === 'function') {
+            await register(results[key]);
+          }
+
+          stopHandlers.push(stop);
+        }
+        catch (e) {
+          error = e;
+        }
+      }),
+  );
 
   await Promise.all(
     Object

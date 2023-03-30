@@ -6,32 +6,64 @@ module.exports = class UserController {
   async addUser(request) {
     const { UserService } = this;
 
-    const { username, password, category } = request.payload;
+    const { username, password, role } = request.payload;
 
-    await UserService.addUser({ username, password, category });
+    const { user } = await UserService.addUser({ username, password, role });
 
-    return {};
+    return { user };
+  }
+
+  async getUser(request) {
+    const { UserService } = this;
+
+    const { userId } = request.token;
+
+    const { user } = await UserService.getUser({ userId });
+
+    return { user };
+  }
+
+  async updateUser(request) {
+    const { UserService } = this;
+
+    const { username } = request.payload;
+    const { userId: userParamsId } = request.params;
+    const { userId } = request.token;
+
+    const { success } = await UserService.updateUser({ userId, username, userParamsId });
+
+    return { success };
+  }
+
+  async removeUser(request) {
+    const { UserService } = this;
+
+    const { userId: userParamsId } = request.params;
+    const { userId } = request.token;
+
+    const { success } = await UserService.removeUser({ userId, userParamsId });
+
+    return { success };
   }
 
   async addDeposit(request) {
     const { UserService } = this;
 
-    // TODO: Grab userId from token header
+    const { userId } = request.token;
     const { amount } = request.payload;
 
-    await UserService.addDeposit({ amount });
+    const { user } = await UserService.addDeposit({ amount, userId });
 
-    return {};
+    return { user };
   }
 
   async resetDeposit(request) {
     const { UserService } = this;
 
-    // TODO: Grab userId from token header
     const { userId } = request.token;
 
-    await UserService.resetDeposit({ userId });
+    const { user } = await UserService.resetDeposit({ userId });
 
-    return {};
+    return { user };
   }
 };

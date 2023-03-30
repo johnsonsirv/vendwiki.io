@@ -5,13 +5,30 @@ const { PRODUCT_COST_MULTIPLE } = require('../../constants');
 
 module.exports = {
   getProducts: {
-    validate: {},
+    validate: {
+      query: (
+        Joi
+          .object()
+          .keys({
+            limit: Joi.number(),
+            offset: Joi.number(),
+          })
+      ),
+    },
     response: {
       schema: Joi.array().items(ProductResponseModelSchema),
     },
   },
   getProduct: {
-    validate: {},
+    validate: {
+      params: (
+        Joi
+          .object()
+          .keys({
+            productId: Joi.objectId().required(),
+          })
+      ),
+    },
     response: {
       schema: ProductResponseModelSchema,
     },
@@ -103,7 +120,7 @@ module.exports = {
           .keys({
             product: Joi.object(),
             purchaseAmount: Joi.number(),
-            balance: Joi.array(),
+            balance: Joi.array().items(Joi.number()),
           })
       ),
     },

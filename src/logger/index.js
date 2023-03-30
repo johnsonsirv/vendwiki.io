@@ -12,15 +12,15 @@ module.exports = ({ config: { log } }) => {
   /**
    * Factory function, returns a function to create json replacer
    * used to filter log messages
-   * @param {*} filedsToIgnore
+   * @param {*} fieldsToIgnore
    * @returns {object}
    */
-  const createErrorReplacer = (filedsToIgnore = []) => (_, value) => {
+  const createErrorReplacer = (fieldsToIgnore = []) => (_, value) => {
     if (value instanceof Error) {
       return (
         Object
           .getOwnPropertyNames(value)
-          .filter((field) => !filedsToIgnore.includes(field))
+          .filter((field) => !fieldsToIgnore.includes(field))
           .reduce((acc, key) => ({ ...acc, key: value[key] }), {})
       );
     }

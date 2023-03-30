@@ -6,12 +6,12 @@ module.exports = class ProductController {
   async getProducts(request) {
     const { ProductService } = this;
 
-    // TODO: Retrieve some fields
-    const { fields } = request.query;
+    const { limit, offset } = request.query;
 
-    await ProductService.getProducts({ fields });
+    const { products } = await ProductService.getProducts({ limit, offset });
 
-    return {};
+    // Do some formatting to return array
+    return products;
   }
 
   async getProduct(request) {
@@ -19,9 +19,10 @@ module.exports = class ProductController {
 
     const { productId } = request.params;
 
-    await ProductService.getProduct({ productId });
+    const { product } = await ProductService.getProduct({ productId });
 
-    return {};
+    // add output formatting here
+    return { product };
   }
 
   async addProduct(request) {
@@ -30,34 +31,35 @@ module.exports = class ProductController {
     const { userId } = request.token;
     const { productName, cost, quantity } = request.payload;
 
-    await ProductService.addProduct({
+    const product = await ProductService.addProduct({
       productName, cost, quantity, userId,
     });
 
-    return {};
+    return { product };
   }
 
   async updateProduct(request) {
     const { ProductService } = this;
 
+    const { userId } = request.token;
     const { productId } = request.params;
     const { productName, cost, quantity } = request.payload;
 
-    await ProductService.updateProduct({
-      productId, productName, cost, quantity,
+    const { success } = await ProductService.updateProduct({
+      productId, productName, cost, quantity, userId,
     });
 
-    return {};
+    return { success };
   }
 
   async removeProduct(request) {
     const { ProductService } = this;
 
+    const { userId } = request.token;
     const { productId } = request.params;
 
-    // TODO: Prefer soft-delete over permanent delete
-    await ProductService.removeProduct({ productId });
+    const { success } = await ProductService.removeProduct({ productId, userId });
 
-    return {};
+    return { success };
   }
 };

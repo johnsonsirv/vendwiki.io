@@ -10,14 +10,78 @@ module.exports = {
         Joi
           .object()
           .keys({
-            username: Joi.string().required(),
-            password: Joi.string().min(4).required(),
-            category: Joi.string().valid(['seller', 'buyer']),
+            username: Joi.string().min(4).max(50).required(),
+            password: Joi.string().min(4).max(15).required(),
+            role: Joi.string().valid('seller', 'buyer'),
           })
       ),
     },
     response: {
       schema: UserResponseModelSchema,
+    },
+  },
+  getUser: {
+    validate: {
+      headers: tokenHeaderModelSchema,
+      params: (
+        Joi
+          .object()
+          .keys({
+            userId: Joi.objectId().required(),
+          })
+      ),
+    },
+    response: {
+      schema: UserResponseModelSchema,
+    },
+  },
+  updateUser: {
+    validate: {
+      // headers: tokenHeaderModelSchema,
+      params: (
+        Joi
+          .object()
+          .keys({
+            userId: Joi.objectId().required(),
+          })
+      ),
+      payload: (
+        Joi
+          .object()
+          .keys({
+            username: Joi.string().required(),
+          })
+      ),
+    },
+    response: {
+      schema: (
+        Joi
+          .object()
+          .keys({
+            success: Joi.boolean(),
+          })
+      ),
+    },
+  },
+  removeUser: {
+    validate: {
+      // headers: tokenHeaderModelSchema,
+      params: (
+        Joi
+          .object()
+          .keys({
+            userId: Joi.objectId().required(),
+          })
+      ),
+    },
+    response: {
+      schema: (
+        Joi
+          .object()
+          .keys({
+            success: Joi.boolean(),
+          })
+      ),
     },
   },
   addDeposit: {
@@ -27,7 +91,7 @@ module.exports = {
         Joi
           .object()
           .keys({
-            amount: Joi.number().valid(ALLOWED_VENDING_AMOUNTS).required(),
+            amount: Joi.number().valid(...ALLOWED_VENDING_AMOUNTS).required(),
           })
       ),
     },
@@ -37,14 +101,7 @@ module.exports = {
   },
   resetDeposit: {
     validate: {
-      headers: tokenHeaderModelSchema,
-      // payload: (
-      //   Joi
-      //     .object()
-      //     .keys({
-      //       userId: Joi.objectId().required(),
-      //     })
-      // ),
+      // headers: tokenHeaderModelSchema,
     },
     response: {
       schema: UserResponseModelSchema,

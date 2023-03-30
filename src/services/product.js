@@ -1,53 +1,98 @@
+const { InvalidProduct } = require('../errors/types');
+
 module.exports = class ProductService {
-  constructor({ ProductDataAccess }) {
+  constructor({ logger, ProductDataAccess }) {
     this.ProductDataAccess = ProductDataAccess;
+    this.logger = logger;
   }
 
-  async getProducts({ fields }) {
-    const { ProductDataAccess } = this;
+  async getProducts({ limit, offset }) {
+    const { ProductDataAccess, logger } = this;
 
-    await ProductDataAccess.getProducts({ fields });
+    logger.debug('[ProductService] getProducts', { limit, offset });
 
-    return {};
+    const products = await ProductDataAccess.getProducts({ limit, offset });
+
+    return { products };
   }
 
   async getProduct({ productId }) {
-    const { ProductDataAccess } = this;
+    const { ProductDataAccess, logger } = this;
 
-    await ProductDataAccess.getProduct({ productId });
+    logger.debug('[ProductService] getProduct', { productId });
 
-    return {};
+    const product = await ProductDataAccess.getProductById({ productId });
+
+    if (!product) {
+      throw new InvalidProduct();
+    }
+
+    return { product };
   }
 
   async addProduct({
     productName, cost, quantity, userId,
   }) {
-    const { ProductDataAccess } = this;
+    const { ProductDataAccess, logger } = this;
 
-    await ProductDataAccess.addProduct({
+    logger.debug('[ProductService] addProduct', {
+      productName,
+      cost,
+      quantity,
+      userId,
+    });
+
+    const product = await ProductDataAccess.addProduct({
       productName, cost, quantity, userId,
     });
 
-    return {};
+    return { product };
   }
 
   async updateProduct({
-    productId, productName, cost, quantity,
+    productId, productName, cost, quantity, userId,
   }) {
-    const { ProductDataAccess } = this;
+    const { ProductDataAccess, logger } = this;
 
-    await ProductDataAccess.updateProduct({
-      productId, productName, cost, quantity,
+    const product = await ProductDataAccess.getProductByUserId({ productId, userId });
+
+    if (!product) {
+      // TODO: handle in a generic way
+      throw new Error('ProductNotFound');
+    }
+
+    logger.debug('[ProductService] updateProduct', {
+      productName,
+      cost,
+      quantity,
+      userId,
     });
 
-    return {};
+    await ProductDataAccess.updateProduct({
+      productId, productName, cost, quantity, userId,
+    });
+
+    return { success: true };
   }
 
-  async removeProduct({ productId }) {
-    const { ProductDataAccess } = this;
+  async removeProduct({ productId, userId }) {
+    const { ProductDataAccess, logger } = this;
 
-    await ProductDataAccess.removeProduct({ productId });
+    const product = await ProductDataAccess.getProductByUserId({ productId, userId });
 
-    return {};
+    if (!product) {
+      // TODO: handle in a generic way
+      throw new Error('ProductNotFound');
+    }
+
+    logger.debug('[ProductService] removeProduct', {
+      productId,
+      userId,
+    });
+
+    // TODO: Prefer soft-delete over permanent delete
+    await ProductDataAccess.removeProduct({ productId, userId });
+
+    return { success: true };
   }
 };

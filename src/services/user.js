@@ -1,29 +1,111 @@
+const UserLogic = require('../logic/user');
+
 module.exports = class UserService {
-  constructor({ UserDataAccess }) {
+  constructor({ UserDataAccess, logger, AuthService }) {
     this.UserDataAccess = UserDataAccess;
+    this.AuthService = AuthService;
+    this.logger = logger;
   }
 
-  async addUser({ username, password, category }) {
-    const { UserDataAccess } = this;
+  async addUser({ username, password, role }) {
+    const { AuthService, UserDataAccess, logger } = this;
 
-    await UserDataAccess.addUser({ username, password, category });
+    logger.debug('[UserService] addUser', {});
 
-    return {};
+    const userExists = await UserDataAccess.getUserByUsername({ username });
+
+    if (userExists) {
+      throw new Error('UserWithUsernameAlreadyExists');
+    }
+
+    const hashedPassword = AuthService.getHashedPassword({ password });
+
+    const user = await UserDataAccess.addUser({ username, hashedPassword, role });
+
+    // TODO: consider returning token
+    return { user };
   }
 
-  async addDeposit({ amount }) {
-    const { UserDataAccess } = this;
+  async getUser({ userId }) {
+    const { UserDataAccess, logger } = this;
 
-    await UserDataAccess.addDeposit({ amount });
+    const user = await UserDataAccess.getUserById({ userId });
 
-    return {};
+    if (!user) {
+      throw new Error('UserNotFound');
+    }
+
+    logger.debug('[UserService] getUser', { userId });
+
+    return { user };
+  }
+
+  async updateUser({ username, userId, userParamsId }) {
+    const { UserDataAccess, logger } = this;
+
+    if (!UserLogic.canUpdateUserAccount({ userId, userParamsId })) {
+      throw new Error('NonAdminUserCanOnlyUpdateOwnAccount');
+    }
+
+    const user = await UserDataAccess.getUserById({ userId });
+
+    if (!user) {
+      throw new Error('UserNotFound');
+    }
+
+    logger.debug('[UserService] updateUser', { userId, username });
+
+    // This is updating own account
+    await UserDataAccess.updateUser({ userId, username });
+
+    return { success: true };
+  }
+
+  async removeUser({ userId, userParamsId }) {
+    const { UserDataAccess, logger } = this;
+
+    if (!UserLogic.canRemoveUserAccount({ userId, userParamsId })) {
+      throw new Error('NonAdminUserCanOnlyRemoveOwnAccount');
+    }
+
+    const user = await UserDataAccess.getUserById({ userId });
+
+    if (!user) {
+      throw new Error('UserNotFound');
+    }
+
+    logger.debug('[UserService] removeUser', { userId });
+
+    // This is deleting own account
+    await UserDataAccess.removeUser({ userId });
+
+    return { success: true };
+  }
+
+  async addDeposit({ amount, userId }) {
+    const { UserDataAccess, logger } = this;
+
+    let user = await UserDataAccess.getUserById({ userId });
+
+    if (UserLogic.checkUserCanAddDeposit({ amount, user })) {
+      logger.debug('[UserService] addDeposit', {
+        userId,
+        amount,
+      });
+
+      user = await UserDataAccess.addDeposit({ amount, userId });
+    }
+
+    return { user };
   }
 
   async resetDeposit({ userId }) {
-    const { UserDataAccess } = this;
+    const { UserDataAccess, logger } = this;
 
-    UserDataAccess.resetDeposit({ userId });
+    logger.debug('[UserService] addDeposit', { userId });
 
-    return {};
+    const user = await UserDataAccess.resetDeposit({ userId });
+
+    return { user };
   }
 };

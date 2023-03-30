@@ -1,12 +1,13 @@
 const bootstrap = require('./bootstrap');
 const container = require('./bootstrap/container');
 const serverModules = require('./server');
+const otherModules = require('./bootstrap/modules');
 const { server: serverConfig } = require('./config');
 
 (async () => {
   try {
     const { livenessProbePeriodSeconds, livenessProbeFailureThreshold } = serverConfig;
-    const { exit, error } = await bootstrap(container, { serverModules });
+    const { exit, error } = await bootstrap(container, otherModules, { serverModules });
 
     if (error) {
       // eslint-disable-next-line no-console
