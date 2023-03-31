@@ -5,6 +5,10 @@ const GENERICS = [
     error: 'BadRequestGenericError',
     statusCode: 400,
   },
+  {
+    error: 'AuthorizationGenericError',
+    statusCode: 403,
+  },
 ];
 
 module.exports = (

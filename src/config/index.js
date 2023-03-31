@@ -12,7 +12,7 @@ const config = {
   server: {
     port: process.env.SERVER_PORT || 8080,
     keepAliveTimeout: process.env.SERVER_KEEP_ALIVE_TIMEOUT || 120000,
-    returnFailedValidationInfoError: (process.env.SERVER_RETURN_VALIDATION_INFO_ERROR || 'false').trim().toLowerCase() === 'true',
+    returnFailedValidationInfoError: (process.env.SERVER_RETURN_VALIDATION_INFO_ERROR || 'true').trim().toLowerCase() === 'true',
     livenessProbeFailureThreshold: process.env.LIVENESS_PROBE_FAILURE_THRESHOLD || 2,
     livenessProbePeriodSeconds: process.env.LIVENESS_PROBE_PERIOD_SECONDS || 2,
   },

@@ -1,4 +1,4 @@
-const { InvalidProduct } = require('../errors/types');
+const { InvalidProduct, ProductNotFound } = require('../errors/types');
 
 module.exports = class ProductService {
   constructor({ logger, ProductDataAccess }) {
@@ -57,8 +57,7 @@ module.exports = class ProductService {
     const product = await ProductDataAccess.getProductByUserId({ productId, userId });
 
     if (!product) {
-      // TODO: handle in a generic way
-      throw new Error('ProductNotFound');
+      throw new ProductNotFound();
     }
 
     logger.debug('[ProductService] updateProduct', {
@@ -81,8 +80,7 @@ module.exports = class ProductService {
     const product = await ProductDataAccess.getProductByUserId({ productId, userId });
 
     if (!product) {
-      // TODO: handle in a generic way
-      throw new Error('ProductNotFound');
+      throw new ProductNotFound();
     }
 
     logger.debug('[ProductService] removeProduct', {

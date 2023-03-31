@@ -1,4 +1,9 @@
 const UserLogic = require('../logic/user');
+const {
+  UserNotFound,
+  NotAuthorizedToPerformAction,
+  UserAlreadyExists,
+} = require('../errors/types');
 
 module.exports = class UserService {
   constructor({ UserDataAccess, logger, AuthService }) {
@@ -15,7 +20,7 @@ module.exports = class UserService {
     const userExists = await UserDataAccess.getUserByUsername({ username });
 
     if (userExists) {
-      throw new Error('UserWithUsernameAlreadyExists');
+      throw new UserAlreadyExists();
     }
 
     const hashedPassword = AuthService.getHashedPassword({ password });
@@ -32,7 +37,7 @@ module.exports = class UserService {
     const user = await UserDataAccess.getUserById({ userId });
 
     if (!user) {
-      throw new Error('UserNotFound');
+      throw new UserNotFound();
     }
 
     logger.debug('[UserService] getUser', { userId });
@@ -44,13 +49,13 @@ module.exports = class UserService {
     const { UserDataAccess, logger } = this;
 
     if (!UserLogic.canUpdateUserAccount({ userId, userParamsId })) {
-      throw new Error('NonAdminUserCanOnlyUpdateOwnAccount');
+      throw new NotAuthorizedToPerformAction();
     }
 
     const user = await UserDataAccess.getUserById({ userId });
 
     if (!user) {
-      throw new Error('UserNotFound');
+      throw new UserNotFound();
     }
 
     logger.debug('[UserService] updateUser', { userId, username });
@@ -65,13 +70,13 @@ module.exports = class UserService {
     const { UserDataAccess, logger } = this;
 
     if (!UserLogic.canRemoveUserAccount({ userId, userParamsId })) {
-      throw new Error('NonAdminUserCanOnlyRemoveOwnAccount');
+      throw new NotAuthorizedToPerformAction();
     }
 
     const user = await UserDataAccess.getUserById({ userId });
 
     if (!user) {
-      throw new Error('UserNotFound');
+      throw new UserNotFound();
     }
 
     logger.debug('[UserService] removeUser', { userId });

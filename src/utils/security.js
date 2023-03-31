@@ -1,3 +1,5 @@
+const { ValidationError } = require('../errors/types');
+
 const checkForSqlInjection = (params) => {
   Object.keys(params).forEach((key) => {
     const value = params[key];
@@ -7,8 +9,7 @@ const checkForSqlInjection = (params) => {
     }
 
     if (key.match(/^\$/)) {
-      // TODO: Handle error in a generic way
-      throw new Error('Error: SQL Injection Attempt');
+      throw new ValidationError('SQL Injection Attempted');
     }
   });
 };

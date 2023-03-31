@@ -67,7 +67,7 @@ module.exports = async (container) => {
           cors,
           validate: {
             // customize the validation for request payload
-            failAsync: async (_, __, err) => {
+            failAction: async (_, __, err) => {
               throw err;
             },
           },

@@ -1,5 +1,5 @@
 const Joi = require('../../utils/joi');
-const tokenHeaderModelSchema = require('../models/token-header');
+// const tokenHeaderModelSchema = require('../models/token-header');
 const UserResponseModelSchema = require('../models/user');
 const { ALLOWED_VENDING_AMOUNTS } = require('../../constants');
 
@@ -22,7 +22,7 @@ module.exports = {
   },
   getUser: {
     validate: {
-      headers: tokenHeaderModelSchema,
+      // headers: tokenHeaderModelSchema,
       params: (
         Joi
           .object()
