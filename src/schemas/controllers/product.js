@@ -65,7 +65,7 @@ module.exports = {
           .object()
           .keys({
             productName: Joi.string().required(),
-            cost: Joi.number().multiple(PRODUCT_COST_MULTIPLE).required(),
+            cost: Joi.number().min(5).multiple(PRODUCT_COST_MULTIPLE).required(),
             quantity: Joi.number().min(1).required(),
           })
       ),

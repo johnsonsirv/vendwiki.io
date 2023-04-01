@@ -6,14 +6,13 @@ const {
 } = require('../errors/types');
 
 module.exports = class UserService {
-  constructor({ UserDataAccess, logger, AuthService }) {
+  constructor({ UserDataAccess, logger }) {
     this.UserDataAccess = UserDataAccess;
-    this.AuthService = AuthService;
     this.logger = logger;
   }
 
   async addUser({ username, password, role }) {
-    const { AuthService, UserDataAccess, logger } = this;
+    const { UserDataAccess, logger } = this;
 
     logger.debug('[UserService] addUser', {});
 
@@ -23,9 +22,9 @@ module.exports = class UserService {
       throw new UserAlreadyExists();
     }
 
-    const hashedPassword = AuthService.getHashedPassword({ password });
+    // const hashedPassword = AuthService.getHashedPassword({ password });
 
-    const user = await UserDataAccess.addUser({ username, hashedPassword, role });
+    const user = await UserDataAccess.addUser({ username, hashedPassword: password, role });
 
     // TODO: consider returning token
     return { user };
@@ -92,7 +91,7 @@ module.exports = class UserService {
 
     let user = await UserDataAccess.getUserById({ userId });
 
-    if (UserLogic.checkUserCanAddDeposit({ amount, user })) {
+    if (UserLogic.checkDeposit({ amount, user })) {
       logger.debug('[UserService] addDeposit', {
         userId,
         amount,
@@ -110,6 +109,14 @@ module.exports = class UserService {
     logger.debug('[UserService] addDeposit', { userId });
 
     const user = await UserDataAccess.resetDeposit({ userId });
+
+    return { user };
+  }
+
+  async updateBalancePostOrder({ totalPurchaseAmount }) {
+    const { UserDataAccess } = this;
+
+    const user = await UserDataAccess.updateBalancePostOrder({ totalPurchaseAmount });
 
     return { user };
   }

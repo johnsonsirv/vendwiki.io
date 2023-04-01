@@ -1,8 +1,16 @@
-const { InvalidProduct, ProductNotFound } = require('../errors/types');
+const {
+  InvalidProduct,
+  ProductNotFound,
+  NotAuthorizedToPerformAction,
+} = require('../errors/types');
+const ProductLogic = require('../logic/product');
 
 module.exports = class ProductService {
-  constructor({ logger, ProductDataAccess }) {
+  constructor({
+    logger, ProductDataAccess, UserService,
+  }) {
     this.ProductDataAccess = ProductDataAccess;
+    this.UserService = UserService;
     this.logger = logger;
   }
 
@@ -33,7 +41,7 @@ module.exports = class ProductService {
   async addProduct({
     productName, cost, quantity, userId,
   }) {
-    const { ProductDataAccess, logger } = this;
+    const { ProductDataAccess, UserService, logger } = this;
 
     logger.debug('[ProductService] addProduct', {
       productName,
@@ -41,6 +49,12 @@ module.exports = class ProductService {
       quantity,
       userId,
     });
+
+    const { user } = await UserService.getUser({ userId });
+
+    if (!ProductLogic.canAddProduct({ user })) {
+      throw new NotAuthorizedToPerformAction();
+    }
 
     const product = await ProductDataAccess.addProduct({
       productName, cost, quantity, userId,
@@ -53,6 +67,8 @@ module.exports = class ProductService {
     productId, productName, cost, quantity, userId,
   }) {
     const { ProductDataAccess, logger } = this;
+
+    // TODO: double-check the user-role is seller
 
     const product = await ProductDataAccess.getProductByUserId({ productId, userId });
 
@@ -77,6 +93,8 @@ module.exports = class ProductService {
   async removeProduct({ productId, userId }) {
     const { ProductDataAccess, logger } = this;
 
+    // TODO: double-check the user-role is seller
+
     const product = await ProductDataAccess.getProductByUserId({ productId, userId });
 
     if (!product) {
@@ -92,5 +110,13 @@ module.exports = class ProductService {
     await ProductDataAccess.removeProduct({ productId, userId });
 
     return { success: true };
+  }
+
+  async updateStockPostOrder({ productId, quantity }) {
+    const { ProductDataAccess } = this;
+
+    const product = await ProductDataAccess.updateStockPostOrder({ productId, quantity });
+
+    return { product };
   }
 };

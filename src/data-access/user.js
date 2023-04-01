@@ -51,8 +51,9 @@ module.exports = class ProductDataAccess {
     return (
       UserModel
         .findOneAndDelete({
-          userId,
+          _id: userId,
         })
+        .lean()
         .exec()
     );
   }
@@ -80,8 +81,26 @@ module.exports = class ProductDataAccess {
         .findOneAndUpdate({
           _id: userId,
         }, {
-          $set: { deposit: [] },
+          $set: { deposit: 0 },
         })
+        .lean()
+        .exec()
+    );
+  }
+
+  async updateBalancePostOrder({ userId, totalPurchaseAmount }) {
+    const { UserModel } = this;
+
+    return (
+      UserModel
+        .findOneAndUpdate(
+          { _id: userId },
+          {
+            $inc: {
+              deposit: -totalPurchaseAmount,
+            },
+          },
+        )
         .lean()
         .exec()
     );

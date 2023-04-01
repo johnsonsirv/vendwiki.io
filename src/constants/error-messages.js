@@ -31,6 +31,18 @@ module.exports = {
     code: 32405,
     origin: BadRequestGenericError,
   },
+  INSUFFICIENT_PRODUCT_STOCK: {
+    parent: BadRequestGenericError,
+    error: 'InsufficientProductStock',
+    message: 'Insufficient product stock',
+    code: 32406,
+  },
+  INSUFFICIENT_FUNDS: {
+    parent: BadRequestGenericError,
+    error: 'InsufficientFunds',
+    message: 'Insufficient Funds',
+    code: 32406,
+  },
   NOT_AUTHORIZED_TO_PERFORM_ACTION: {
     error: 'NotAuthorizedToPerformAction',
     message: 'Not Authorized to perform action',

@@ -34,12 +34,12 @@ module.exports = class ProductDataAccess {
   }
 
   // TODO: Ensure index is in place
-  async getPromoByUserId({ productId, userId }) {
+  async getProductByUserId({ productId, userId }) {
     const { ProductModel } = this;
 
     return (
       ProductModel
-        .findById({
+        .find({
           _id: productId,
           seller: userId,
         })
@@ -66,7 +66,7 @@ module.exports = class ProductDataAccess {
   }
 
   async updateProduct({
-    productId, productName, cost, quantity,
+    productId, productName, cost, quantity, userId,
   }) {
     const { ProductModel } = this;
 
@@ -74,6 +74,7 @@ module.exports = class ProductDataAccess {
       ProductModel
         .findOneAndUpdate({
           _id: productId,
+          seller: userId,
         }, {
           $set: {
             quantity,
@@ -92,9 +93,28 @@ module.exports = class ProductDataAccess {
     return (
       ProductModel
         .findOneAndDelete({
-          productId,
+          _id: productId,
           seller: userId,
         })
+        .lean()
+        .exec()
+    );
+  }
+
+  async updateStockPostOrder({ productId, quantity }) {
+    const { ProductModel } = this;
+
+    return (
+      ProductModel
+        .findOneAndUpdate(
+          { _id: productId },
+          {
+            $inc: {
+              quantity: -quantity,
+            },
+          },
+        )
+        .lean()
         .exec()
     );
   }

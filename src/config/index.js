@@ -9,6 +9,9 @@ const config = {
     url: process.env.MONGO_DB_URL || '',
     poolSize: process.env.MONGO_DB_POOL_SIZE || 10, // for older driver versions
   },
+  redis: {
+    url: process.env.REDIS_URL || '',
+  },
   server: {
     port: process.env.SERVER_PORT || 8080,
     keepAliveTimeout: process.env.SERVER_KEEP_ALIVE_TIMEOUT || 120000,

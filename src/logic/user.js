@@ -5,7 +5,7 @@ const {
 } = require('../errors/types');
 
 module.exports = class UserLogic {
-  static checkUserCanAddDeposit({ amount, user }) {
+  static checkDeposit({ amount, user }) {
     if (user && user.role === USER_ROLES.buyer) {
       throw new NotAuthorizedToPerformAction();
     }
@@ -13,13 +13,6 @@ module.exports = class UserLogic {
     if (!ALLOWED_VENDING_AMOUNTS.includes(amount)) {
       throw new InvalidDepositAmount(
         `InvalidDepositAmount. Amount should be any of ${ALLOWED_VENDING_AMOUNTS}`,
-      );
-    }
-
-    // TODO: check this business logic again
-    if (user && user.deposit.includes(amount)) {
-      throw new InvalidDepositAmount(
-        `AmountPreviouslyVended. ${amount} already exists in your wallet`,
       );
     }
 

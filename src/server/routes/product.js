@@ -85,6 +85,6 @@ module.exports = ([
         logging: false,
       },
     },
-    handler: ({ ProductController }) => ((request, h) => ProductController.buyProduct(request, h)),
+    handler: ({ OrderUserController }) => ((request, h) => OrderUserController.createOrder(request, h)),
   },
 ]);

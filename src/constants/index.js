@@ -6,4 +6,10 @@ module.exports = {
     buyer: 'buyer',
     seller: 'seller',
   },
+  // can be scaled to track history of order
+  ORDER_PURCHASE_STATUSES: {
+    INCOMPLETE: 100,
+    COMPLETE: 900,
+    CANCELED: 1200,
+  },
 };
