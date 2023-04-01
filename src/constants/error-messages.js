@@ -1,4 +1,4 @@
-const { BadRequestGenericError, AuthorizationGenericError } = require('../errors/generics');
+const { BadRequestGenericError, AuthorizationGenericError, UncaughtGenericError } = require('../errors/generics');
 
 module.exports = {
   INVALID_PRODUCT: {
@@ -57,5 +57,11 @@ module.exports = {
   VALIDATION: {
     error: 'ValidationError',
     code: -42000,
+  },
+  WARLOCK_ERROR: {
+    error: 'WarlockError',
+    message: 'Warlock Error',
+    code: -43000,
+    origin: UncaughtGenericError,
   },
 };

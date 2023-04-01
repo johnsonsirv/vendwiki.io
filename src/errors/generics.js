@@ -9,6 +9,10 @@ const GENERICS = [
     error: 'AuthorizationGenericError',
     statusCode: 403,
   },
+  {
+    error: 'UncaughtGenericError',
+    statusCode: 500,
+  },
 ];
 
 module.exports = (

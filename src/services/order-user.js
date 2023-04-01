@@ -8,11 +8,12 @@ const OrderUserLogic = require('../logic/order-user');
 
 module.exports = class OrderUserService {
   constructor({
-    OrderDataAccess, UserService, ProductService, logger,
+    OrderDataAccess, UserService, ProductService, WarlockService, logger,
   }) {
     this.OrderDataAccess = OrderDataAccess;
     this.UserService = UserService;
     this.ProductService = ProductService;
+    this.WarlockService = WarlockService;
 
     this.logger = logger;
   }
@@ -25,10 +26,8 @@ module.exports = class OrderUserService {
 
   async privateCreateOrder({ productId, quantity, userId }) {
     const {
-      OrderDataAccess, UserService, ProductService, logger,
+      OrderDataAccess, UserService, ProductService, WarlockService, logger,
     } = this;
-
-    // TODO: Use warlock
 
     const { product } = await ProductService.getProduct({ productId });
 
@@ -77,29 +76,35 @@ module.exports = class OrderUserService {
       throw new NotAuthorizedToPerformAction();
     }
 
-    const { basket } = OrderUserLogic.getOrderBasket({ productId, quantity, totalPurchaseAmount });
+    return WarlockService.critical({
+      key: ['order:user:', userId].join(':'),
+      maxAttempts: 5,
+      promise: async () => {
+        const { basket } = OrderUserLogic.getOrderBasket({ productId, quantity, totalPurchaseAmount });
 
-    const order = await OrderDataAccess.createOrder({ userId, basket });
+        const order = await OrderDataAccess.createOrder({ userId, basket });
 
-    try {
-      await Promise.all([
-        ProductService.updateStockPostOrder({ quantity, productId }),
-        UserService.updateBalancePostOrder({ totalPurchaseAmount, userId }),
-      ]);
-    }
-    catch (error) {
-      logger.debug('[OrderUser] privateCreateOrder - post order error', {
-        productId,
-        quantity,
-        user,
-        product,
-        balanceBeforePurchase,
-        totalPurchaseAmount,
-        order,
-        error,
-      });
-    }
+        try {
+          await Promise.all([
+            ProductService.updateStockPostOrder({ quantity, productId }),
+            UserService.updateBalancePostOrder({ totalPurchaseAmount, userId }),
+          ]);
+        }
+        catch (error) {
+          logger.debug('[OrderUser] privateCreateOrder - post order error', {
+            productId,
+            quantity,
+            user,
+            product,
+            balanceBeforePurchase,
+            totalPurchaseAmount,
+            order,
+            error,
+          });
+        }
 
-    return order;
+        return order;
+      },
+    });
   }
 };

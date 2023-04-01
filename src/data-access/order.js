@@ -8,7 +8,6 @@ module.exports = class OrderDataAccess {
   async createOrder({ userId, basket }) {
     const { OrderModel } = this;
 
-    // return {a:1}
     return (
       OrderModel
         .create({
