@@ -1,33 +1,17 @@
 const Joi = require('../../utils/joi');
-// const tokenHeaderModelSchema = require('../models/token-header');
+const tokenHeaderModelSchema = require('../models/token-header');
 const UserResponseModelSchema = require('../models/user');
 const { ALLOWED_VENDING_AMOUNTS } = require('../../constants');
 
 module.exports = {
-  addUser: {
-    validate: {
-      payload: (
-        Joi
-          .object()
-          .keys({
-            username: Joi.string().min(4).max(50).required(),
-            password: Joi.string().min(4).max(15).required(),
-            role: Joi.string().valid('seller', 'buyer'),
-          })
-      ),
-    },
-    response: {
-      schema: UserResponseModelSchema,
-    },
-  },
   getUser: {
     validate: {
-      // headers: tokenHeaderModelSchema,
+      headers: tokenHeaderModelSchema,
       params: (
         Joi
           .object()
           .keys({
-            userId: Joi.objectId().required(),
+            userId: Joi.string().required(),
           })
       ),
     },
@@ -37,12 +21,12 @@ module.exports = {
   },
   updateUser: {
     validate: {
-      // headers: tokenHeaderModelSchema,
+      headers: tokenHeaderModelSchema,
       params: (
         Joi
           .object()
           .keys({
-            userId: Joi.objectId().required(),
+            userId: Joi.string().required(),
           })
       ),
       payload: (
@@ -65,12 +49,12 @@ module.exports = {
   },
   removeUser: {
     validate: {
-      // headers: tokenHeaderModelSchema,
+      headers: tokenHeaderModelSchema,
       params: (
         Joi
           .object()
           .keys({
-            userId: Joi.objectId().required(),
+            userId: Joi.string().required(),
           })
       ),
     },
@@ -86,7 +70,7 @@ module.exports = {
   },
   addDeposit: {
     validate: {
-      // headers: tokenHeaderModelSchema,
+      headers: tokenHeaderModelSchema,
       payload: (
         Joi
           .object()
@@ -96,15 +80,27 @@ module.exports = {
       ),
     },
     response: {
-      schema: UserResponseModelSchema,
+      schema: (
+        Joi
+          .object()
+          .keys({
+            success: Joi.boolean(),
+          })
+      ),
     },
   },
   resetDeposit: {
     validate: {
-      // headers: tokenHeaderModelSchema,
+      headers: tokenHeaderModelSchema,
     },
     response: {
-      schema: UserResponseModelSchema,
+      schema: (
+        Joi
+          .object()
+          .keys({
+            success: Joi.boolean(),
+          })
+      ),
     },
   },
 };

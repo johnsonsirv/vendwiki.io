@@ -26,6 +26,10 @@ const config = {
   swagger: {
     enabled: (process.env.SWAGGER_ENABLED || 'true').trim().toLowerCase() === 'true',
   },
+  jwt: {
+    secret: process.env.JWT_SECRET || 'my-server-key',
+    expiresIn: 30000,
+  },
 };
 
 config.log = {

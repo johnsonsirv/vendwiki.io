@@ -3,20 +3,10 @@ module.exports = class UserController {
     this.UserService = UserService;
   }
 
-  async addUser(request) {
-    const { UserService } = this;
-
-    const { username, password, role } = request.payload;
-
-    const { user } = await UserService.addUser({ username, password, role });
-
-    return { user };
-  }
-
   async getUser(request) {
     const { UserService } = this;
 
-    const { userId } = request.token;
+    const { userId } = request.params;
 
     const { user } = await UserService.getUser({ userId });
 
@@ -28,7 +18,7 @@ module.exports = class UserController {
 
     const { username } = request.payload;
     const { userId: userParamsId } = request.params;
-    const { userId } = request.token;
+    const { user: { _id: userId } } = request.token;
 
     const { success } = await UserService.updateUser({ userId, username, userParamsId });
 
@@ -39,7 +29,7 @@ module.exports = class UserController {
     const { UserService } = this;
 
     const { userId: userParamsId } = request.params;
-    const { userId } = request.token;
+    const { user: { _id: userId } } = request.token;
 
     const { success } = await UserService.removeUser({ userId, userParamsId });
 
@@ -49,21 +39,21 @@ module.exports = class UserController {
   async addDeposit(request) {
     const { UserService } = this;
 
-    const { userId } = request.token;
+    const { user: { _id: userId } } = request.token;
     const { amount } = request.payload;
 
-    const { user } = await UserService.addDeposit({ amount, userId });
+    const { success } = await UserService.addDeposit({ amount, userId });
 
-    return { user };
+    return { success };
   }
 
   async resetDeposit(request) {
     const { UserService } = this;
 
-    const { userId } = request.token;
+    const { user: { _id: userId } } = request.token;
 
-    const { user } = await UserService.resetDeposit({ userId });
+    const { success } = await UserService.resetDeposit({ userId });
 
-    return { user };
+    return { success };
   }
 };

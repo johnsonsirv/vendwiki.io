@@ -6,6 +6,10 @@ const GENERICS = [
     statusCode: 400,
   },
   {
+    error: 'AuthenticationGenericError',
+    statusCode: 401,
+  },
+  {
     error: 'AuthorizationGenericError',
     statusCode: 403,
   },

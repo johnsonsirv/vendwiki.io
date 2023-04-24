@@ -1,5 +1,5 @@
 const {
-  getProducts, getProduct, addProduct, updateProduct, removeProduct, buyProduct,
+  getProducts, getProduct, addProduct, updateProduct, removeProduct,
 } = require('../../schemas/controllers/product');
 
 module.exports = ([
@@ -72,19 +72,5 @@ module.exports = ([
       },
     },
     handler: ({ ProductController }) => ((request, h) => ProductController.removeProduct(request, h)),
-  },
-  {
-    path: '/buy',
-    method: 'POST',
-    config: {
-      tags: ['api'],
-      description: 'Buyer purchase a product',
-      validate: buyProduct.validate,
-      response: buyProduct.response,
-      plugins: {
-        logging: false,
-      },
-    },
-    handler: ({ OrderUserController }) => ((request, h) => OrderUserController.createOrder(request, h)),
   },
 ]);

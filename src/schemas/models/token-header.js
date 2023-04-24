@@ -4,7 +4,7 @@ module.exports = (
   Joi
     .object()
     .keys({
-      token: Joi.string(),
+      token: Joi.string().required(),
       x_access_token: Joi.string(),
       x_refresh_token: Joi.string(),
       'x-language': Joi.string(),

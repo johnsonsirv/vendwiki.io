@@ -15,6 +15,6 @@ module.exports = class OrderDataAccess {
           basket,
           status: ORDER_PURCHASE_STATUSES.COMPLETE,
         })
-    ).toObject();
+    ).toJSON();
   }
 };

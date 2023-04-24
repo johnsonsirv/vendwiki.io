@@ -1,4 +1,9 @@
-const { BadRequestGenericError, AuthorizationGenericError, UncaughtGenericError } = require('../errors/generics');
+const {
+  BadRequestGenericError,
+  AuthorizationGenericError,
+  UncaughtGenericError,
+  AuthenticationGenericError,
+} = require('../errors/generics');
 
 module.exports = {
   INVALID_PRODUCT: {
@@ -25,23 +30,35 @@ module.exports = {
     code: 32404,
     origin: BadRequestGenericError,
   },
+  USER_SIGNUP_FAILED: {
+    error: 'UserSignupFailed',
+    message: 'User Signup Failed',
+    code: 32405,
+    origin: BadRequestGenericError,
+  },
+  USER_LOGIN_FAILED: {
+    error: 'UserLoginFailed',
+    message: 'User Login Failed - Invalid username or password',
+    code: 32406,
+    origin: BadRequestGenericError,
+  },
   USER_ALREADY_EXISTS: {
     error: 'UserAlreadyExists',
-    message: 'User Already Exists',
-    code: 32405,
+    message: 'User Already Exists. Login to continue',
+    code: 32407,
     origin: BadRequestGenericError,
   },
   INSUFFICIENT_PRODUCT_STOCK: {
     parent: BadRequestGenericError,
     error: 'InsufficientProductStock',
     message: 'Insufficient product stock',
-    code: 32406,
+    code: 32408,
   },
   INSUFFICIENT_FUNDS: {
     parent: BadRequestGenericError,
     error: 'InsufficientFunds',
     message: 'Insufficient Funds',
-    code: 32406,
+    code: 32409,
   },
   NOT_AUTHORIZED_TO_PERFORM_ACTION: {
     error: 'NotAuthorizedToPerformAction',
@@ -63,5 +80,29 @@ module.exports = {
     message: 'Warlock Error',
     code: -43000,
     origin: UncaughtGenericError,
+  },
+  INVALID_TOKEN: {
+    error: 'InvalidToken',
+    message: 'Invalid Token',
+    code: -4400,
+    origin: AuthenticationGenericError,
+  },
+  MISSING_TOKEN: {
+    error: 'MissingToken',
+    message: 'Missing Authentication Token',
+    code: -4500,
+    origin: UncaughtGenericError,
+  },
+  EXPIRED_TOKEN: {
+    error: 'ExpiredToken',
+    message: 'Expired Token. Login again',
+    code: -4600,
+    origin: AuthenticationGenericError,
+  },
+  AUTH_TOKEN_GENERATION_FAILED: {
+    error: 'AuthTokenGenerationFailed',
+    message: 'Auth TokenGeneration Failed',
+    code: -4700,
+    origin: AuthenticationGenericError,
   },
 };

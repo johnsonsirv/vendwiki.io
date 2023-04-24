@@ -12,9 +12,7 @@ module.exports = class UserService {
   }
 
   async addUser({ username, password, role }) {
-    const { UserDataAccess, logger } = this;
-
-    logger.debug('[UserService] addUser', {});
+    const { UserDataAccess } = this;
 
     const userExists = await UserDataAccess.getUserByUsername({ username });
 
@@ -22,24 +20,29 @@ module.exports = class UserService {
       throw new UserAlreadyExists();
     }
 
-    // const hashedPassword = AuthService.getHashedPassword({ password });
+    const user = await UserDataAccess.addUser({ username, password, role });
 
-    const user = await UserDataAccess.addUser({ username, hashedPassword: password, role });
-
-    // TODO: consider returning token
     return { user };
   }
 
-  async getUser({ userId }) {
+  async getUser({ userId, fields }) {
     const { UserDataAccess, logger } = this;
 
-    const user = await UserDataAccess.getUserById({ userId });
+    const user = await UserDataAccess.getUserById({ userId, fields });
 
     if (!user) {
       throw new UserNotFound();
     }
 
     logger.debug('[UserService] getUser', { userId });
+
+    return { user };
+  }
+
+  async getUserByUsername({ username, fields }) {
+    const { UserDataAccess } = this;
+
+    const user = await UserDataAccess.getUserByUsername({ username, fields });
 
     return { user };
   }
@@ -59,7 +62,6 @@ module.exports = class UserService {
 
     logger.debug('[UserService] updateUser', { userId, username });
 
-    // This is updating own account
     await UserDataAccess.updateUser({ userId, username });
 
     return { success: true };
@@ -89,7 +91,7 @@ module.exports = class UserService {
   async addDeposit({ amount, userId }) {
     const { UserDataAccess, logger } = this;
 
-    let user = await UserDataAccess.getUserById({ userId });
+    const user = await UserDataAccess.getUserById({ userId });
 
     if (UserLogic.checkDeposit({ amount, user })) {
       logger.debug('[UserService] addDeposit', {
@@ -97,20 +99,20 @@ module.exports = class UserService {
         amount,
       });
 
-      user = await UserDataAccess.addDeposit({ amount, userId });
+      await UserDataAccess.addDeposit({ amount, userId });
     }
 
-    return { user };
+    return { success: true };
   }
 
   async resetDeposit({ userId }) {
     const { UserDataAccess, logger } = this;
 
-    logger.debug('[UserService] addDeposit', { userId });
+    logger.debug('[UserService] resetDeposit', { userId });
 
-    const user = await UserDataAccess.resetDeposit({ userId });
+    await UserDataAccess.resetDeposit({ userId });
 
-    return { user };
+    return { success: true };
   }
 
   async updateBalancePostOrder({ totalPurchaseAmount }) {

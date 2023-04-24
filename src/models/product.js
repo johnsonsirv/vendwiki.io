@@ -12,6 +12,6 @@ const Product = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-module.exports = ({ mongooseConnection }) => {
-  mongooseConnection.model('Product', Product);
-};
+module.exports = ({ mongooseConnection }) => (
+  mongooseConnection.model('Product', Product)
+);

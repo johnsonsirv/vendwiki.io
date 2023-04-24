@@ -25,6 +25,9 @@ container
     {
       cwd: __dirname,
       formatName: formatNameWithGroup('Model'),
+      resolverOptions: {
+        lifetime: awilix.Lifetime.SINGLETON,
+      },
     },
   );
 
@@ -35,6 +38,9 @@ container
     {
       cwd: __dirname,
       formatName: formatNameWithGroup('DataAccess'),
+      resolverOptions: {
+        lifetime: awilix.Lifetime.SINGLETON,
+      },
     },
   );
 

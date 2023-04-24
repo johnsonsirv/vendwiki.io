@@ -1,5 +1,6 @@
 const awilix = require('awilix');
 const mongoose = require('mongoose');
+const { QUERY_TIME_LIMIT } = require('../../constants');
 
 module.exports = async (container) => {
   const logger = container.resolve('logger');
@@ -15,6 +16,8 @@ module.exports = async (container) => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
+
+    mongooseConnection.set('maxTimeMS', QUERY_TIME_LIMIT);
 
     // Register additional plugins
     const addUpdatedAt = (schema) => {
@@ -37,7 +40,7 @@ module.exports = async (container) => {
   };
 
   const stop = async () => {
-    mongooseConnection.close();
+    await mongooseConnection.close();
   };
 
   const register = async () => {

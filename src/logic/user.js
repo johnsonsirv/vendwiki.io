@@ -6,14 +6,12 @@ const {
 
 module.exports = class UserLogic {
   static checkDeposit({ amount, user }) {
-    if (user && user.role === USER_ROLES.buyer) {
+    if (user && user.role !== USER_ROLES.buyer) {
       throw new NotAuthorizedToPerformAction();
     }
 
     if (!ALLOWED_VENDING_AMOUNTS.includes(amount)) {
-      throw new InvalidDepositAmount(
-        `InvalidDepositAmount. Amount should be any of ${ALLOWED_VENDING_AMOUNTS}`,
-      );
+      throw new InvalidDepositAmount();
     }
 
     return true;

@@ -1,4 +1,4 @@
-module.exports = class ProductDataAccess {
+module.exports = class UserDataAccess {
   constructor({ UserModel }) {
     this.UserModel = UserModel;
   }
@@ -8,24 +8,35 @@ module.exports = class ProductDataAccess {
 
     return (
       UserModel
-        .findById(userId)
+        .findOne({ _id: userId })
         .select(fields)
         .lean()
         .exec()
     );
   }
 
-  async addUser({ username, hashedPassword, role }) {
+  async getUserByUsername({ username, fields = '-__v' }) {
+    const { UserModel } = this;
+
+    return (
+      UserModel
+        .findOne({ username })
+        .select(fields)
+        .exec()
+    );
+  }
+
+  async addUser({ username, password, role }) {
     const { UserModel } = this;
 
     return (
       UserModel
         .create({
           username,
-          password: hashedPassword,
+          password,
           role,
         })
-    ).toObject();
+    );
   }
 
   async updateUser({ username, userId }) {
@@ -66,7 +77,7 @@ module.exports = class ProductDataAccess {
         .findOneAndUpdate({
           _id: userId,
         }, {
-          $push: { deposit: amount },
+          $inc: { deposit: +amount },
         })
         .lean()
         .exec()

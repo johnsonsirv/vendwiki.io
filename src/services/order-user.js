@@ -21,6 +21,10 @@ module.exports = class OrderUserService {
   async createOrder({ productId, quantity, userId }) {
     const order = await this.privateCreateOrder({ productId, quantity, userId });
 
+    if (!order) {
+      throw new Error('Order could not have been created');
+    }
+
     return { order };
   }
 

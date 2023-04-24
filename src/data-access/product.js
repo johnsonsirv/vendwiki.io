@@ -62,7 +62,7 @@ module.exports = class ProductDataAccess {
           quantity,
           seller: userId,
         })
-    ).toObject();
+    ).toJSON();
   }
 
   async updateProduct({
