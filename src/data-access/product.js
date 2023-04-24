@@ -27,7 +27,7 @@ module.exports = class ProductDataAccess {
     return (
       ProductModel
         .findById(productId)
-        .select()
+        .select('-__v')
         .lean()
         .exec()
     );
@@ -43,7 +43,7 @@ module.exports = class ProductDataAccess {
           _id: productId,
           seller: userId,
         })
-        .select()
+        .select('-__v')
         .lean()
         .exec()
     );
@@ -62,7 +62,7 @@ module.exports = class ProductDataAccess {
           quantity,
           seller: userId,
         })
-    ).toJSON();
+    );
   }
 
   async updateProduct({

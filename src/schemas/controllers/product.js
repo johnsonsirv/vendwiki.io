@@ -1,11 +1,12 @@
 const Joi = require('../../utils/joi');
-// const tokenHeaderModelSchema = require('../models/token-header');
+const tokenHeaderModelSchema = require('../models/token-header');
 const ProductResponseModelSchema = require('../models/product');
 const { PRODUCT_COST_MULTIPLE } = require('../../constants');
 
 module.exports = {
   getProducts: {
     validate: {
+      headers: tokenHeaderModelSchema,
       query: (
         Joi
           .object()
@@ -21,11 +22,12 @@ module.exports = {
   },
   getProduct: {
     validate: {
+      headers: tokenHeaderModelSchema,
       params: (
         Joi
           .object()
           .keys({
-            productId: Joi.objectId().required(),
+            productId: Joi.string().required(),
           })
       ),
     },
@@ -35,7 +37,7 @@ module.exports = {
   },
   addProduct: {
     validate: {
-      // headers: tokenHeaderModelSchema,
+      headers: tokenHeaderModelSchema,
       payload: (
         Joi
           .object()
@@ -52,12 +54,12 @@ module.exports = {
   },
   updateProduct: {
     validate: {
-      // headers: tokenHeaderModelSchema,
+      headers: tokenHeaderModelSchema,
       params: (
         Joi
           .object()
           .keys({
-            productId: Joi.objectId().required(),
+            productId: Joi.string().required(),
           })
       ),
       payload: (
@@ -82,12 +84,12 @@ module.exports = {
   },
   removeProduct: {
     validate: {
-      // headers: tokenHeaderModelSchema,
+      headers: tokenHeaderModelSchema,
       params: (
         Joi
           .object()
           .keys({
-            productId: Joi.objectId().required(),
+            productId: Joi.string().required(),
           })
       ),
     },
@@ -103,7 +105,7 @@ module.exports = {
   },
   buyProduct: {
     validate: {
-      // headers: tokenHeaderModelSchema,
+      headers: tokenHeaderModelSchema,
       payload: (
         Joi
           .object()

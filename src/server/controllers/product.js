@@ -28,11 +28,11 @@ module.exports = class ProductController {
   async addProduct(request) {
     const { ProductService } = this;
 
-    // const { userId } = request.token;
+    const { user } = request.token;
     const { productName, cost, quantity } = request.payload;
 
-    const product = await ProductService.addProduct({
-      productName, cost, quantity, userId: 1,
+    const { product } = await ProductService.addProduct({
+      productName, cost, quantity, user,
     });
 
     return { product };
@@ -41,12 +41,12 @@ module.exports = class ProductController {
   async updateProduct(request) {
     const { ProductService } = this;
 
-    // const { userId } = request.token;
+    const { user: { _id: userId } } = request.token;
     const { productId } = request.params;
     const { productName, cost, quantity } = request.payload;
 
     const { success } = await ProductService.updateProduct({
-      productId, productName, cost, quantity, userId: 1,
+      productId, productName, cost, quantity, userId,
     });
 
     return { success };
@@ -55,10 +55,10 @@ module.exports = class ProductController {
   async removeProduct(request) {
     const { ProductService } = this;
 
-    // const { userId } = request.token;
+    const { user: { _id: userId } } = request.token;
     const { productId } = request.params;
 
-    const { success } = await ProductService.removeProduct({ productId, userId: 1 });
+    const { success } = await ProductService.removeProduct({ productId, userId });
 
     return { success };
   }

@@ -13,6 +13,11 @@ module.exports = ([
       response: getProducts.response,
       plugins: {
         logging: false,
+        tokenValidation: {
+          required: true,
+          optional: false,
+          scope: false,
+        },
       },
     },
     handler: ({ ProductController }) => ((request, h) => ProductController.getProducts(request, h)),
@@ -27,6 +32,11 @@ module.exports = ([
       response: getProduct.response,
       plugins: {
         logging: false,
+        tokenValidation: {
+          required: true,
+          optional: false,
+          scope: false,
+        },
       },
     },
     handler: ({ ProductController }) => ((request, h) => ProductController.getProduct(request, h)),
@@ -41,6 +51,11 @@ module.exports = ([
       response: addProduct.response,
       plugins: {
         logging: false,
+        tokenValidation: {
+          required: true,
+          optional: false,
+          scope: ['seller'],
+        },
       },
     },
     handler: ({ ProductController }) => ((request, h) => ProductController.addProduct(request, h)),
@@ -55,6 +70,11 @@ module.exports = ([
       response: updateProduct.response,
       plugins: {
         logging: false,
+        tokenValidation: {
+          required: true,
+          optional: false,
+          scope: ['seller'],
+        },
       },
     },
     handler: ({ ProductController }) => ((request, h) => ProductController.updateProduct(request, h)),
@@ -69,6 +89,11 @@ module.exports = ([
       response: removeProduct.response,
       plugins: {
         logging: false,
+        tokenValidation: {
+          required: true,
+          optional: false,
+          scope: ['seller'],
+        },
       },
     },
     handler: ({ ProductController }) => ((request, h) => ProductController.removeProduct(request, h)),

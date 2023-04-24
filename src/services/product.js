@@ -39,9 +39,11 @@ module.exports = class ProductService {
   }
 
   async addProduct({
-    productName, cost, quantity, userId,
+    productName, cost, quantity, user,
   }) {
-    const { ProductDataAccess, UserService, logger } = this;
+    const { ProductDataAccess, logger } = this;
+
+    const userId = user._id;
 
     logger.debug('[ProductService] addProduct', {
       productName,
@@ -50,11 +52,11 @@ module.exports = class ProductService {
       userId,
     });
 
-    const { user } = await UserService.getUser({ userId });
-
     if (!ProductLogic.canAddProduct({ user })) {
       throw new NotAuthorizedToPerformAction();
     }
+
+    // Check product with name already exists for seller?
 
     const product = await ProductDataAccess.addProduct({
       productName, cost, quantity, userId,
@@ -67,8 +69,6 @@ module.exports = class ProductService {
     productId, productName, cost, quantity, userId,
   }) {
     const { ProductDataAccess, logger } = this;
-
-    // TODO: double-check the user-role is seller
 
     const product = await ProductDataAccess.getProductByUserId({ productId, userId });
 
@@ -92,8 +92,6 @@ module.exports = class ProductService {
 
   async removeProduct({ productId, userId }) {
     const { ProductDataAccess, logger } = this;
-
-    // TODO: double-check the user-role is seller
 
     const product = await ProductDataAccess.getProductByUserId({ productId, userId });
 
