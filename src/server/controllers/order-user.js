@@ -6,10 +6,10 @@ module.exports = class OrderUserController {
   async createOrder(request) {
     const { OrderUserService } = this;
 
-    // const { userId } = request.token;
+    const { user: { _id: userId } } = request.token;
     const { productId, quantity } = request.payload;
 
-    const { order } = await OrderUserService.buyProduct({ productId, quantity, userId: 123 });
+    const { order } = await OrderUserService.createOrder({ productId, quantity, userId });
 
     return { order };
   }

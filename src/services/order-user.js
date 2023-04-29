@@ -1,8 +1,8 @@
 const {
-  ProductNotFound,
   InsufficientProductStock,
   InsufficientFunds,
   NotAuthorizedToPerformAction,
+  OrderNotCompleted,
 } = require('../errors/types');
 const OrderUserLogic = require('../logic/order-user');
 
@@ -22,7 +22,7 @@ module.exports = class OrderUserService {
     const order = await this.privateCreateOrder({ productId, quantity, userId });
 
     if (!order) {
-      throw new Error('Order could not have been created');
+      throw new OrderNotCompleted();
     }
 
     return { order };
@@ -35,14 +35,6 @@ module.exports = class OrderUserService {
 
     const { product } = await ProductService.getProduct({ productId });
 
-    if (!product) {
-      logger.debug('[privateCreateOrder] createOrder - product not found', {
-        productId,
-      });
-
-      throw new ProductNotFound();
-    }
-
     if (!OrderUserLogic.isProductAvailable({ product, quantity })) {
       logger.debug('[privateCreateOrder] privateCreateOrder - insufficient product stock', {
         product,
@@ -52,11 +44,7 @@ module.exports = class OrderUserService {
       throw new InsufficientProductStock();
     }
 
-    // TODO: add user to token prevent lookup all the time
     const { user } = await UserService.getUser({ userId });
-
-    // TODO: handle authorization at preHandler
-    // Check user has authorized role
 
     const balanceBeforePurchase = OrderUserLogic.getBalance({ user });
     const totalPurchaseAmount = product.cost * quantity;
@@ -71,7 +59,7 @@ module.exports = class OrderUserService {
       throw new InsufficientFunds();
     }
 
-    if (product.seller.toString() === userId) {
+    if (OrderUserLogic.isOwnProduct({ product, userId })) {
       logger.debug('[privateCreateOrder] privateCreateOrder - cannot purchase own product', {
         product,
         user,

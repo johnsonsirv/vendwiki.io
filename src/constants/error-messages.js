@@ -49,16 +49,22 @@ module.exports = {
     origin: BadRequestGenericError,
   },
   INSUFFICIENT_PRODUCT_STOCK: {
-    parent: BadRequestGenericError,
     error: 'InsufficientProductStock',
     message: 'Insufficient product stock',
     code: 32408,
+    origin: BadRequestGenericError,
   },
   INSUFFICIENT_FUNDS: {
-    parent: BadRequestGenericError,
     error: 'InsufficientFunds',
     message: 'Insufficient Funds',
     code: 32409,
+    origin: BadRequestGenericError,
+  },
+  ORDER_NOT_CREATED: {
+    error: 'OrderNotCompleted',
+    message: 'Order not be completed',
+    code: 32409,
+    origin: BadRequestGenericError,
   },
   NOT_AUTHORIZED_TO_PERFORM_ACTION: {
     error: 'NotAuthorizedToPerformAction',

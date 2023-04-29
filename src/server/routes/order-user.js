@@ -11,6 +11,11 @@ module.exports = ([
       response: buyProduct.response,
       plugins: {
         logging: false,
+        tokenValidation: {
+          required: true,
+          optional: false,
+          scope: ['buyer'],
+        },
       },
     },
     handler: ({ OrderUserController }) => ((request, h) => OrderUserController.createOrder(request, h)),

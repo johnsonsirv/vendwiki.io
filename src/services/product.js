@@ -1,5 +1,4 @@
 const {
-  InvalidProduct,
   ProductNotFound,
   NotAuthorizedToPerformAction,
 } = require('../errors/types');
@@ -32,7 +31,7 @@ module.exports = class ProductService {
     const product = await ProductDataAccess.getProductById({ productId });
 
     if (!product) {
-      throw new InvalidProduct();
+      throw new ProductNotFound();
     }
 
     return { product };

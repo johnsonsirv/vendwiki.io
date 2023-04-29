@@ -110,7 +110,7 @@ module.exports = {
         Joi
           .object()
           .keys({
-            productId: Joi.objectId().required(),
+            productId: Joi.string().required(),
             quantity: Joi.number().min(1).required(),
           })
       ),

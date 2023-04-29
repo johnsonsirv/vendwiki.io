@@ -11,7 +11,8 @@ module.exports = class OrderUserLogic {
 
   static getBalance({ user }) {
     return (
-      user.deposit.reduce((acc, cur) => (acc + cur), 0)
+      // user.deposit.reduce((acc, cur) => (acc + cur), 0)
+      user.deposit
     );
   }
 
@@ -25,5 +26,9 @@ module.exports = class OrderUserLogic {
     }
 
     return true;
+  }
+
+  static isOwnProduct({ product, userId }) {
+    return product.seller.toString() === userId.toString();
   }
 };
