@@ -5,7 +5,7 @@ issueConfigs:
 - content:
 # Example 1: bug report
   - "Describe the Bug"
-  - "Steps to Reproduce"
+  - "Steps To Reproduce"
   - "Current Behavior"
   - "Expected Behavior"
   - "Additional Context"
@@ -13,7 +13,7 @@ issueConfigs:
 - content:
 # Example 2: feature request
   - "Description"
-  - "Expected Behavior"
+  - "Expected Behaviour"
   - "Additional Context"
 # The issue is judged to be legal if it includes all keywords from any of these two configs.
 # Or it will be closed by the app.
