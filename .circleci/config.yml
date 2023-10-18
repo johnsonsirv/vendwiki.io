@@ -3,7 +3,7 @@ jobs:
   eslint:
     docker:
       - image: cimg/node:20.8.1
-    working_directory: ~/src
+    working_directory: ~/src/
     steps:
       - checkout
       - restore_cache:
@@ -23,7 +23,7 @@ jobs:
   test_jest:
     docker:
       - image: cimg/node:20.8.1
-    working_directory: ~/src
+    working_directory: ~/src/
     steps:
       - checkout
       - restore_cache:
