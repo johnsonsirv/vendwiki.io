@@ -20,7 +20,7 @@ jobs:
           name: Run eslint
           command: npm run lint
 
-  test:jest:
+  test_jest:
     docker:
       - image: cimg/node:20.8.1
     working_directory: ~/src
@@ -47,4 +47,4 @@ workflows:
   build-and-test:
     jobs:
       - eslint
-      - test:jest
+      - test_jest
