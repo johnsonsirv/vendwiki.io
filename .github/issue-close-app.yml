@@ -1,0 +1,19 @@
+# Comment that will be sent if an issue is judged to be closed
+comment: "This issue is closed because it does not meet our issue template. Please read it."
+issueConfigs:
+# There can be several configs for different kind of issues.
+- content:
+# Example 1: bug report
+  - "Describe the Bug"
+  - "Steps to Reproduce"
+  - "Current Behavior"
+  - "Expected Behavior"
+  - "Additional Context"
+
+- content:
+# Example 2: feature request
+  - "Description"
+  - "Expected Behavior"
+  - "Additional Context"
+# The issue is judged to be legal if it includes all keywords from any of these two configs.
+# Or it will be closed by the app.
