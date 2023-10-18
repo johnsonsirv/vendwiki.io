@@ -5,9 +5,9 @@ issueConfigs:
 - content:
 # Example 1: bug report
   - "Describe the Bug"
-  - "Steps To Reproduce"
-  - "Current Behavior"
-  - "Expected Behavior"
+  - "Steps to Reproduce"
+  - "Current Behaviour"
+  - "Expected Behaviour"
   - "Additional Context"
 
 - content:
