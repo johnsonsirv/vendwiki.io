@@ -1,0 +1,50 @@
+version: 2.1
+jobs:
+  eslint:
+    docker:
+      - image: cimg/node:20.8.1
+    working_directory: ~/src/
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: npm install
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: v1-dependencies-{{checksum "package.json"}}
+      - run:
+          name: Run eslint
+          command: npm run lint
+
+  test_jest:
+    docker:
+      - image: cimg/node:20.8.1
+    working_directory: ~/src/
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: npm install
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: v1-dependencies-{{checksum "package.json"}}
+      - run:
+          name: Run Jest
+          command: npm test
+      - store_artifacts:
+          path: coverage
+          destination: coverage
+
+workflows:
+  build-and-test:
+    jobs:
+      - eslint
+      - test_jest

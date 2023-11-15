@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node .",
     "dev": "nodemon .",
-    "test": "jest -c jest.config.js --runInBand --detectOpenHandles --forceExit",
+    "test": "NODE_ENV=test jest -c jest.config.js --runInBand --detectOpenHandles --forceExit",
     "lint": "eslint --ignore-pattern 'node_modules/**' 'src/index.js'",
     "lint-fix": "npm run lint -- --fix"
   },
@@ -49,6 +49,6 @@
     "nodemon": "^2.0.3"
   },
   "keywords": [],
-  "author": "",
+  "author": "Victor Okeugo",
   "license": "ISC"
 }
