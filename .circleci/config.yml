@@ -1,18 +1,50 @@
 version: 2.1
 jobs:
-  say_hello:
+  eslint:
     docker:
-      - image: cimg/base:2022.05
+      - image: cimg/node:20.8.1
+    working_directory: ~/src/
     steps:
-      - run: echo "hello"
-  say_bye:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: npm install
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: v1-dependencies-{{checksum "package.json"}}
+      - run:
+          name: Run eslint
+          command: npm run lint
+
+  test_jest:
     docker:
-      - image: cimg/base:2022.05
+      - image: cimg/node:20.8.1
+    working_directory: ~/src/
     steps:
-      - run: echo "bye"
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: npm install
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: v1-dependencies-{{checksum "package.json"}}
+      - run:
+          name: Run Jest
+          command: npm test
+      - store_artifacts:
+          path: coverage
+          destination: coverage
 
 workflows:
-  hello_and_bye:
+  build-and-test:
     jobs:
-      - say_hello
-      - say_bye
+      - eslint
+      - test_jest

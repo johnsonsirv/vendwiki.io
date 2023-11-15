@@ -1,0 +1,6 @@
+{
+  "env": {
+    "jest": true
+  },
+  "ignorePatterns": ["mocks/bootstrap/*.js"]
+}
